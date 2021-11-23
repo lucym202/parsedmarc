@@ -1023,7 +1023,8 @@ def get_dmarc_reports_from_inbox(connection=None,
                                  dns_timeout=6.0,
                                  strip_attachment_payloads=False,
                                  results=None,
-                                 batch_size=None):
+                                 batch_size=None,
+                                 no_subfolders=False):
     """
     Fetches and parses DMARC reports from an inbox
 
@@ -1048,6 +1049,7 @@ def get_dmarc_reports_from_inbox(connection=None,
         forensic report results
         results (dict): Results from the previous run
         batch_size (int): Number of messages to read and process before saving
+        no_subfolders (bool): Create only a single level of folder depth (for IMAP daemons which disallow inferior mailboxex)
 
     Returns:
         OrderedDict: Lists of ``aggregate_reports`` and ``forensic_reports``
@@ -1063,9 +1065,15 @@ def get_dmarc_reports_from_inbox(connection=None,
     forensic_reports = []
     aggregate_report_msg_uids = []
     forensic_report_msg_uids = []
-    aggregate_reports_folder = "{0}/Aggregate".format(archive_folder)
-    forensic_reports_folder = "{0}/Forensic".format(archive_folder)
-    invalid_reports_folder = "{0}/Invalid".format(archive_folder)
+    
+    if no_subfolders:
+        aggregate_reports_folder = "{0}.Aggregate".format(archive_folder)
+        forensic_reports_folder = "{0}.Forensic".format(archive_folder)
+        invalid_reports_folder = "{0}.Invalid".format(archive_folder)
+    else:
+        aggregate_reports_folder = "{0}/Aggregate".format(archive_folder)
+        forensic_reports_folder = "{0}/Forensic".format(archive_folder)
+        invalid_reports_folder = "{0}/Invalid".format(archive_folder)
 
     if results:
         aggregate_reports = results["aggregate_reports"].copy()
