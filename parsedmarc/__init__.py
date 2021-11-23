@@ -1049,7 +1049,7 @@ def get_dmarc_reports_from_inbox(connection=None,
         forensic report results
         results (dict): Results from the previous run
         batch_size (int): Number of messages to read and process before saving
-        no_subfolders (bool): Create only a single level of folder depth (for IMAP daemons which disallow inferior mailboxex)
+        no_subfolders (bool): Create only a single level of folder depth (for IMAP daemons which disallow inferior mailboxes)
 
     Returns:
         OrderedDict: Lists of ``aggregate_reports`` and ``forensic_reports``
